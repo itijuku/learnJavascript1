@@ -15,8 +15,6 @@ let gravityPower = -3;
 let isJump = false;
 let isOnStage = false;
 
-const jumpSound = new Audio("sound/jump.mp3")
-
 const jumpMaxCount = 50
 let jumpPower = 10;
 let jumpCount = 0;
@@ -83,7 +81,8 @@ function setPlayerPos(){
 function fpsCountor(){
     fps_data.push(Date.now());
     fps_data = fps_data.filter(d=>Date.now() - d < 1000);
-    return fps_data.length;
+    drowText(`FPS: ${fps_data.length}`,canvas.width/10,canvas.width/10,"Black");
+    requestAnimationFrame(fpsCountor);
 }
 
 function playerProcess(){
@@ -93,6 +92,7 @@ function playerProcess(){
         pXS = -pSpeed;
     }if(down_key.includes("ArrowUp")){
         if(!isJump && isOnStage){
+            const jumpSound = new Audio("sound/jump.mp3");
             jumpSound.play();
             isJump = true;
             isOnStage = false;
@@ -139,8 +139,7 @@ function main(){
     jump();
     drowPlayer(pX,pY,"blue");
     isNeedSpawn();
-    drowText(`FPS: ${fpsCountor()}`,canvas.width/10,canvas.width/10,"Black");
 }
 
-drowStage();
+requestAnimationFrame(fpsCountor);
 setInterval(main,1000 / 60);
